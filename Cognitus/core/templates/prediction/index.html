@@ -1,0 +1,67 @@
+{% extends 'layout.html' %} {% block content %}
+<section>
+    <h1>Prediction Page</h1>
+
+    <hr />
+    <br /><br />
+
+    <div class="row">
+        <div class="col">
+            <div class="header">
+                <h2>Train</h2>
+            </div>
+            <button class="btn btn-primary" id="trainData">Train</button>
+            <p id='status'></p>
+        </div>
+
+        <div class="col">
+            <div class="header">
+                <h2>Predict</h2>
+            </div>
+            <form id="predictDataForm">
+                <div class="mb-3">
+                    <label for="predictText">Text</label>
+                    <input
+                        type="text"
+                        class="form-control"
+                        id="predictText"
+                        placeholder="Predict Text"
+                        method="GET"
+                        required
+                    />
+                </div>
+                <button
+                    type="submit"
+                    class="btn btn-success"
+                    id="predictButton"
+                >
+                    Predict
+                </button>
+            </form>
+            <p id='result'></p>
+        </div>
+    </div>
+</section>
+
+{% endblock content %} 
+
+{% block javascript %}
+<script>
+    const url = "http://0.0.0.0:8000/prediction/";
+    $("#trainData").on("click", (e) => {
+        e.preventDefault();
+        let t_url = url + "train_data/";
+        trainData(t_url);
+    });
+
+    $("#predictButton").on("click", (e) => {
+        e.preventDefault();
+        let p_url = url + "predict/";
+        const formData = {
+            predict_text: predictDataForm.elements["predictText"].value,
+        };
+        prediction(p_url, formData);
+    });
+</script>
+
+{% endblock javascript %}

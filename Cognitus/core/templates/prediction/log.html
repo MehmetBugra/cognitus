@@ -1,0 +1,25 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<div class="container">
+  <div class="row">
+    <div class="col-sm">
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">Logs</th>
+          </tr>
+        </thead>
+            {{logs}}
+      </table>
+    </div>
+  </div>
+</div>
+
+{% endblock content %}
+
+{% comment %} <tbody>
+    {% for log in logs %}
+    <tr>
+
+</tbody> {% endcomment %}

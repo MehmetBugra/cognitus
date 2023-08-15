@@ -1,0 +1,84 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<div class="container">
+  <div class="row">
+    <div class="col-sm">
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Text</th>
+            <th scope="col">Label</th>
+          </tr>
+        </thead>
+        <tbody>
+            {% for data in database %}
+            <tr>
+                <th scope="row">{{ data.id }}</th>
+                <td>{{ data.text }}</td>
+                <td>{{ data.label }}</td>
+              </tr>
+            {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <div class="col-sm">
+      <form id="updateDataForm">
+        <div class="mb-3">
+          <label for="updateDataId">ID</label>
+          <input type="number" class="form-control" id="updateDataId" placeholder="Post ID">
+        </div>
+        <div class="mb-3">
+          <label for="postText">Text</label>
+          <input type="text" class="form-control" id="postText" placeholder="Text"></input>
+        </div>
+        <div class="mb-3">
+          <label for="postTitle">Label</label>
+          <input type="text" class="form-control" id="postTitle" placeholder="Label">
+        </div>
+          <button type="submit" class="btn btn-warning" id="updateDataButton">Update</button>
+      </form>
+
+      <form id="deleteDataForm" class="mt-5">
+        <div class="mb-3">
+        <label for="deleteDataId">ID</label>
+        <input type="number" class="form-control" id="deleteDataId" placeholder="Post ID">
+        </div>
+        <button type="submit" class="btn btn-danger" id="deleteDataButton">Delete</button>
+      </form>
+    </div>
+
+
+  </div>
+</div>
+
+{% endblock content %}
+
+
+{% block javascript %}
+<script>
+    const url = "http://0.0.0.0:8000/prediction/"
+
+    $('#deleteDataButton').on('click', (e) => {
+        let id = deleteDataForm.elements["deleteDataId"].value
+        deleteData(url + `delete-data/${id}`);
+        $("#deleteDataForm").trigger("reset");
+    })
+
+    $('#updateDataButton').on('click', (e) => {
+        // e.preventDefault();
+
+        let id = updateDataForm.elements["updateDataId"].value
+        
+        const formData = {
+          label: updateDataForm.elements["postTitle"].value,
+          text: updateDataForm.elements["postText"].value
+        }
+        updateData((url + `update-data/${id}`), formData)
+        $("#updateDataForm").trigger("reset");
+      })
+
+
+</script>
+{% endblock javascript %}

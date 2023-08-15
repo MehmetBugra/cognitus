@@ -1,0 +1,50 @@
+version: "3"
+
+services:
+    postgres:
+        image: postgres
+        environment:
+            POSTGRES_USER: postgres
+            POSTGRES_PASSWORD: postgres
+            POSTGRES_DB: cognitus_project_1
+        volumes:
+            - db_data:/var/lib/postgresql/data
+        ports:
+            - "5432:5432"
+
+    redis:
+        image: redis
+        ports:
+            - "6379:6379"  
+
+    web:
+        image: web
+        depends_on:
+            - postgres
+        ports:
+            - "8000:8000"
+
+    algorithm:
+        image: algorithm
+        depends_on:
+            - postgres
+            - redis
+        volumes:
+            - ./model.pickle:/app/model.pickle
+            - ./vectorizer.pickle:/app/vectorizer.pickle
+            - ./trains.log:/app/trains.log
+        ports:
+            - "8001:8001"
+
+    algorithm_celery:
+        image: algorithm_celery
+        depends_on:
+            - postgres
+            - redis
+        volumes:
+            - ./model.pickle:/app/model.pickle
+            - ./vectorizer.pickle:/app/vectorizer.pickle
+            - ./trains.log:/app/trains.log
+volumes:
+    db_data:
+    algorithm_data:

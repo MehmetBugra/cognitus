@@ -1,0 +1,17 @@
+FROM python:3.10
+ENV PYTHONUNBUFFERED 1
+
+# Gerekli bağımlılıkları kopyala
+COPY requirements_web.txt /app/requirements_web.txt
+
+# Diğer adımlar
+WORKDIR /app
+
+RUN pip install -r requirements_web.txt
+
+# Servis dosyalarını Docker içine kopyala
+COPY . /app
+
+RUN chmod +x /app/entrypoint.sh
+# Uygulamayı başlat
+ENTRYPOINT [ "/app/entrypoint.sh" ]

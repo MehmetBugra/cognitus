@@ -1,0 +1,15 @@
+# Base image
+FROM python:3.10
+
+WORKDIR /app
+
+# Diğer gerekli bağımlılıkları yükleyin
+COPY requirements.txt /app
+
+RUN pip install -r requirements.txt
+
+# Servis dosyalarını Docker içine kopyalayın
+COPY . /app/
+
+# Çalıştırılacak komutu belirtin
+CMD ["uvicorn", "main:app", "--port", "8001", "--host", "0.0.0.0"]
