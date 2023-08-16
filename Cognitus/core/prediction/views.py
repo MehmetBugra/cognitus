@@ -58,16 +58,14 @@ class ReadDatasAPIView(ListAPIView):
 class DestroyDataAPIView(APIView):
     serializer_class = DestroyDataSerializer
     
-    def delete(self, request, id):
-        # r = request.data
-        # ???
-        # if 'payload' in r:
-        #     payload = r.get('payload')
-        #     print(payload)
-        #     serializer = self.serializer_class(data=payload)
-        #     serializer.is_valid()
-        #     print(serializer.validated_data)
-        response = requests.delete(fast_url + f'delete_data?data_id={id}')
+    def delete(self, request):
+        r = json.load(request)
+
+        if 'payload' in r:
+            payload = r.get('payload')
+            serializer = self.serializer_class(data=payload)
+            serializer.is_valid(raise_exception=True)
+            response = requests.delete(fast_url + 'delete_data', json=serializer.validated_data)
         return Response({'status': 'deleted'}, status=response.status_code)
 
 
@@ -96,7 +94,6 @@ class FileUploadAPIView(APIView):
         serializer.is_valid(raise_exception=True)
         _file = {'file': serializer.validated_data['myFile']}
         response = requests.post(fast_url + 'upload_file', files=(_file))
-        print(response.text)
         return Response({'status': 'ok'}, status=response.status_code)
 
 
@@ -106,7 +103,6 @@ class TrainDataAPIView(APIView):
 
     def get(self, request):
         response = requests.get(fast_url + 'train_data/')
-        print(response.text)
         return Response({'status' :response.text}, status=response.status_code)
 
 
@@ -118,11 +114,11 @@ class PredictAPIView(APIView):
         data = json.load(request)
 
         if 'payload' in data:
-            result = data.get('payload')
-            serializer = self.serializer_class(data=result)
+            payload = data.get('payload')
+            serializer = self.serializer_class(data=payload)
             serializer.is_valid(raise_exception=True)
-            response = requests.get(fast_url + f'predict/?predict_text={serializer.validated_data["predict_text"]}')
-            result = response.json()['prediction_result']
+            response = requests.post(fast_url + f'predict/', json=serializer.validated_data)
+            result = response.json()["prediction_result"]
             return Response({'predict_result': result}, status=response.status_code)
 
 

@@ -61,9 +61,11 @@
     const url = "http://0.0.0.0:8000/prediction/"
 
     $('#deleteDataButton').on('click', (e) => {
-        let id = deleteDataForm.elements["deleteDataId"].value
-        deleteData(url + `delete-data/${id}`);
-        $("#deleteDataForm").trigger("reset");
+      const formData = {
+        id: deleteDataForm.elements["deleteDataId"].value
+      }        
+      deleteData(url + `delete-data/`, formData);
+      $("#deleteDataForm").trigger("reset");
     })
 
     $('#updateDataButton').on('click', (e) => {

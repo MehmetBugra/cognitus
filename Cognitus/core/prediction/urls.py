@@ -16,7 +16,7 @@ urlpatterns = [
     path("get-data/", ReadDatasAPIView.as_view()),
     path('add-data/', CreateDataAPIView.as_view()),
     path('update-data/<int:id>', UpdateDataAPIView.as_view()),
-    path('delete-data/<int:id>', DestroyDataAPIView.as_view()),
+    path('delete-data/', DestroyDataAPIView.as_view()),
     path('upload-file/', FileUploadAPIView.as_view()),
     path('train_data/', TrainDataAPIView.as_view()),
     path('predict/',PredictAPIView.as_view()),

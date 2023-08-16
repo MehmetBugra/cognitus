@@ -20,7 +20,9 @@ from crud import (
 )
 from schemas import (
     DataCreateSchema,
-    DataUpdateSchema
+    DataUpdateSchema,
+    DataDeleteSchema,
+    PredictTextSchema
 )
 
 
@@ -35,9 +37,9 @@ async def train_data(db: Session = Depends(get_db)):
     return {'status': 'train success'}
 
 
-@app.get('/predict')
-async def predict_data(predict_text: str, db: Session = Depends(get_db)):
-    result = predict.delay(predict_text)
+@app.post('/predict')
+async def predict_data(predict_text: PredictTextSchema, db: Session = Depends(get_db)):
+    result = predict.delay(predict_text.predict_text)
     return {'prediction_result': result.get()}
 
 
@@ -64,8 +66,8 @@ async def data_update(data: DataUpdateSchema, inst_id: int, db: Session = Depend
 
 
 @app.delete('/delete_data')
-async def data_delete(data_id: int, db: Session = Depends(get_db)):
-    data = get_data(db, data_id)
+async def data_delete(data_id: DataDeleteSchema, db: Session = Depends(get_db)):
+    data = get_data(db, data_id.id)
     delete_data(db, data)
 
 

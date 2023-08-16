@@ -80,21 +80,20 @@ function updateData(url, payload) {
     });
 }
 
-function deleteData(url) {
+function deleteData(url, payload) {
     $.ajax({
         url: url,
         type: "DELETE",
         dataType: "json",
+        data: JSON.stringify({ payload: payload }),
         headers: {
             "X-Requested-With": "XMLHttpRequest",
             "X-CSRFToken": getCookie("csrftoken"),
         },
         success: (data) => {
             console.log(data);
-            console.log("aaaaaaaaaa");
         },
         error: (error) => {
-            console.log("bbbbbbbbbb");
             console.log(error);
         },
     });

@@ -15,3 +15,6 @@ class DataCreateSchema(DataBase):
 
 class DataUpdateSchema(DataBase):
     pass
+
+class PredictTextSchema(BaseModel):
+    predict_text: str
