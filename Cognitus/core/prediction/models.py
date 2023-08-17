@@ -8,3 +8,15 @@ class DataModel(models.Model):
 
     text = models.TextField()
     label = models.TextField()
+
+
+class LogModel(models.Model):
+    class Meta:
+        verbose_name = "Log"
+        verbose_name_plural = "Logs"
+    
+    message = models.CharField()
+    accuracy = models.CharField()
+    started_date = models.CharField()
+    finished_date = models.CharField()
+

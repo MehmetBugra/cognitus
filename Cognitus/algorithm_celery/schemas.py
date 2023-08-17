@@ -18,3 +18,10 @@ class DataUpdateSchema(DataBase):
 
 class PredictTextSchema(BaseModel):
     predict_text: str
+
+class LogSchema(BaseModel):
+    message: str
+    accuracy: str
+    started_date: str
+    finished_date: str
+

@@ -16,13 +16,16 @@ from crud import (
     create_data,
     update_data,
     delete_data,
-    save_file
+    save_file,
+    addLog,
+    getLog
 )
 from schemas import (
     DataCreateSchema,
     DataUpdateSchema,
     DataDeleteSchema,
-    PredictTextSchema
+    PredictTextSchema,
+    LogSchema
 )
 
 
@@ -75,6 +78,16 @@ async def data_delete(data_id: DataDeleteSchema, db: Session = Depends(get_db)):
 async def upload_file(file: UploadFile, db: Session = Depends(get_db)):
     await save_file(file, db)
     return {"message": f"Successfuly uploaded {file.filename},"}
+
+@app.post('/add_log')
+async def add_log(log: LogSchema, db: Session = Depends(get_db)):
+    addLog(log, db)
+    return {'log': log}
+
+@app.get('/get_log')
+async def get_log(db: Session = Depends(get_db)):
+    logs = getLog(db)
+    return {'log': logs}
 
 # if __name__ == "__main__":
 #    uvicorn.run("main:app", host="127.0.0.1", port=8001)

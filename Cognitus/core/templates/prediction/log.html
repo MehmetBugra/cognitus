@@ -7,19 +7,27 @@
       <table class="table">
         <thead>
           <tr>
-            <th scope="col">Logs</th>
+            <th scope="col">#</th>
+            <th scope="col">Message</th>
+            <th scope="col">Accuracy</th>
+            <th scope="col">Start Date</th>
+            <th scope="col">Finish Date</th>
           </tr>
         </thead>
-            {{logs}}
+        <tbody>
+            {% for log in logs %}
+            <tr>
+                <th scope="row">{{ log.id }}</th>
+                <td>{{ log.message }}</td>
+                <td>{{ log.accuracy }}</td>
+                <td>{{ log.started_date }}</td>
+                <td>{{ log.finished_date }}</td>
+              </tr>
+            {% endfor %}
+        </tbody>
       </table>
     </div>
   </div>
 </div>
 
 {% endblock content %}
-
-{% comment %} <tbody>
-    {% for log in logs %}
-    <tr>
-
-</tbody> {% endcomment %}

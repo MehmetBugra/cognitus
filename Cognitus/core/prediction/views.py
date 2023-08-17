@@ -124,5 +124,5 @@ class PredictAPIView(APIView):
 
 class ReadLogAPIView(APIView):
     def get(self, request):
-        response = requests.get(fast_url + 'log')
-        return render(request, 'log.html', {'logs': response.json()})
+        response = requests.get(fast_url + 'get_log')
+        return render(request, 'log.html', {'logs': response.json()['log']})

@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Session
-from models import DataModel
+from models import DataModel, LogModel
 import pandas as pd
 from database import engine
 
@@ -69,3 +69,20 @@ async def save_file(file, db: Session):
         db.refresh(d)
 
     return {'status': 'success'}
+
+
+# Log
+
+def addLog(log: LogModel, db: Session):
+    log_ = LogModel(**log.model_dump())
+    try:
+        db.add(log_)
+        db.commit()
+        db.refresh(log_)
+        return log
+
+    except Exception as e :
+        raise ValueError(f'Error creating new log: {e}')
+
+def getLog(db: Session):
+    return db.query(LogModel).all()

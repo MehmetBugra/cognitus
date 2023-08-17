@@ -32,7 +32,6 @@ services:
         volumes:
             - ./model.pickle:/app/model.pickle
             - ./vectorizer.pickle:/app/vectorizer.pickle
-            - ./trains.log:/app/trains.log
         ports:
             - "8001:8001"
 
@@ -44,7 +43,6 @@ services:
         volumes:
             - ./model.pickle:/app/model.pickle
             - ./vectorizer.pickle:/app/vectorizer.pickle
-            - ./trains.log:/app/trains.log
 volumes:
     db_data:
     algorithm_data:

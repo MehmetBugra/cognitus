@@ -7,7 +7,8 @@ from sklearn.svm import SVC
 from sklearn.metrics import precision_score, accuracy_score, recall_score
 
 from celery import Celery
-import time
+from datetime import datetime
+import requests
 
 myCelery = Celery(
     'worker',
@@ -15,7 +16,17 @@ myCelery = Celery(
     backend='redis://redis:6379/0'  # Redis backend adresini belirtin
 )
 
-log_file = "./train.log"
+def create_log(mes, acc, start, finish):
+    data = {
+        "message": mes,
+        "accuracy": acc,
+        "started_date": start,
+        "finished_date": finish
+    }
+
+    requests.post('http://algorithm:8001/add_log', json=data)
+    
+    return data
 
 def create_data(array):
     df = pd.DataFrame(array)
@@ -53,16 +64,15 @@ def get_datas():
 # TRAIN
 @myCelery.task
 def train():
-    start = time.time()
+    start = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     text, label = get_datas()
     training, vectorizer = tfidf(text)
     x_train, x_test, y_train, y_test = train_test_split(training, label, test_size=0.25, random_state=0)
     model, accuracy, precision, recall = test_SVM(x_train, x_test, y_train, y_test)
     dump_model(model, './model.pickle')
     dump_model(vectorizer, './vectorizer.pickle')
-    finish = time.time()
-    with open(log_file, "a") as f:
-        f.write(f"{time.asctime} - INFO - Successfully trained on {(finish - start):.2f} second(s)\n")
+    finish = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    create_log("Train", str(accuracy), str(start), str(finish))
     return {'status': 'success'}
 
 
